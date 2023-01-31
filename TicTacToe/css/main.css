@@ -69,6 +69,10 @@
     user-select: none;
 }
 
+.board__cell.cell__winner {
+    filter: invert(100%);
+}
+
 .board__cell.cell_active:hover {
     transform: scale(1.1);
     background: #3d3d3d;

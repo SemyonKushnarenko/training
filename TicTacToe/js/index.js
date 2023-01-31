@@ -19,7 +19,7 @@ const turnIterator = array => {
 const nextTurn = turnIterator(turns);
 let turn = nextTurn();
 turnNote.innerText = `${turn} turn`;
-let win = false;
+let isWin = false;
 
 table.addEventListener('click', event => {
     if (
@@ -28,8 +28,8 @@ table.addEventListener('click', event => {
     ) {
         event.target.innerText = turn;
         event.target.classList.remove('cell_active')
-        win = checkForWinner()
-        if (win) {
+        isWin = checkForWinner()
+        if (isWin) {
             document.querySelectorAll(`.board__cell`).forEach(cell => {
                 cell.classList.remove('cell_active')
             })
@@ -43,11 +43,21 @@ table.addEventListener('click', event => {
 });
 
 function areCellsEqual(firstIndex, secondIndex, thirdIndex) {
-    return (document.querySelector(`[data-cell-number="${firstIndex}"]`).innerText
-        === document.querySelector(`[data-cell-number="${secondIndex}"]`).innerText)
-        && (document.querySelector(`[data-cell-number="${secondIndex}"]`).innerText
-        === document.querySelector(`[data-cell-number="${thirdIndex}"]`).innerText)
-        && document.querySelector(`[data-cell-number="${firstIndex}"]`).innerText;
+    const elements = [firstIndex, secondIndex, thirdIndex]
+        .map(indexOfElement =>
+            document.querySelector(`[data-cell-number="${indexOfElement}"]`)
+        );
+    const [firstElement, secondElement, thirdElement] = elements;
+    const areEqual = !!(
+        (firstElement.innerText === secondElement.innerText)
+        && (secondElement.innerText === thirdElement.innerText)
+        && firstElement.innerText
+    );
+    if (areEqual) {
+        elements.forEach(element => element.classList.add('cell__winner'))
+    }
+
+    return areEqual;
 }
 
 function checkForWinner() {
